@@ -1,7 +1,7 @@
 require "rails"
 
 module Snapcher
-  class InstallGenerotor < ::Rails::Generators::Base
+  class InstallGenerator < ::Rails::Generators::Base
     def initialize
     end
 
