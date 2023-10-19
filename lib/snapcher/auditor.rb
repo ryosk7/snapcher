@@ -35,7 +35,9 @@ module Snapcher
       end
 
       def snapshot_update
-        write_audit(action: "update", column_name: self.audited_options[:monitoring_column_name], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
+        if (changes = audited_changes).present?
+          write_audit(action: "update", column_name: self.audited_options[:monitoring_column_name], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
+        end
       end
 
       # List of attributes that are audited.
@@ -46,7 +48,7 @@ module Snapcher
         normalize_enum_changes(audited_attributes)
       end
 
-      def audited_changes
+      def snapshot_change_values
         all_changes = if respond_to?(:changes_to_save)
           changes_to_save
         else
@@ -64,8 +66,15 @@ module Snapcher
         filtered_changes = filter_encrypted_attrs(filtered_changes)
         filtered_changes = normalize_enum_changes(filtered_changes)
         filtered_changes.to_hash
+      end
+
+      def audited_changes
+        filtered_changes = snapshot_change_values
 
         monitoring_column_name = self.audited_options[:monitoring_column_name]
+
+        return if filtered_changes[monitoring_column_name.to_sym].nil?
+
         before_params = filtered_changes[monitoring_column_name.to_sym][0]
         after_params = filtered_changes[monitoring_column_name.to_sym][1]
         {before_params: before_params, after_params: after_params}
