@@ -31,12 +31,11 @@ module Snapcher
       REDACTED = "[REDACTED]"
 
       def snapshot_create
-        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_names], before_params: nil, after_params: audited_attributes[self.audited_options[:monitoring_column_names]])
+        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_names], before_params: audited_attributes[self.audited_options[:monitoring_column_names]])
       end
 
       def snapshot_update
-        # debugger
-        write_audit(action: "update", audited_changes: audited_attributes)
+        write_audit(action: "update", column_name: self.audited_options[:monitoring_column_names], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
       end
 
       # List of attributes that are audited.
@@ -47,9 +46,32 @@ module Snapcher
         normalize_enum_changes(audited_attributes)
       end
 
-      def write_audit(attrs)
-        # debugger
+      def audited_changes
+        all_changes = if respond_to?(:changes_to_save)
+          changes_to_save
+        else
+          changes
+        end
 
+        filtered_changes = \
+          if audited_options[:only].present?
+            all_changes.slice(*self.class.audited_columns)
+          else
+            all_changes.except(*self.class.non_audited_columns)
+          end
+
+        filtered_changes = redact_values(filtered_changes)
+        filtered_changes = filter_encrypted_attrs(filtered_changes)
+        filtered_changes = normalize_enum_changes(filtered_changes)
+        filtered_changes.to_hash
+
+        monitoring_column_name = self.audited_options[:monitoring_column_names]
+        before_params = filtered_changes[monitoring_column_name.to_sym][0]
+        after_params = filtered_changes[monitoring_column_name.to_sym][1]
+        {before_params: before_params, after_params: after_params}
+      end
+
+      def write_audit(attrs)
         run_callbacks(:snapshot) {
           p "========== snapshot callback =========="
           snapshot = snapchers.create(attrs)
