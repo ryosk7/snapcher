@@ -5,18 +5,21 @@ module Snapcher
   module Auditor
     extend ActiveSupport::Concern
 
-    CALLBACKS = [:snapshot_create]
+    CALLBACKS = [:snapshot_create, :snapshot_update]
 
     module ClassMethods
-      def snapshot
+      def snapshot(options = {})
         extend Snapcher::Auditor::SnapcherClassMethods
         include Snapcher::Auditor::SnapshotInstanceMethods
 
         class_attribute :audited_options, instance_writer: false
 
+        self.audited_options = options
+
         has_many :snapchers, -> { order(version: :asc) }, as: :snapchable, class_name: "Snapcher::Snapshot", inverse_of: :snapchable
 
         after_create :snapshot_create
+        before_update :snapshot_update
 
         define_callbacks :snapshot
         # set_callback :snapshot, :after, :after_snapshot
@@ -25,8 +28,15 @@ module Snapcher
     end
 
     module SnapshotInstanceMethods
+      REDACTED = "[REDACTED]"
+
       def snapshot_create
-        write_audit(action: "create", audited_changes: audited_attributes)
+        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_names], before_params: nil, after_params: audited_attributes[self.audited_options[:monitoring_column_names]])
+      end
+
+      def snapshot_update
+        # debugger
+        write_audit(action: "update", audited_changes: audited_attributes)
       end
 
       # List of attributes that are audited.
@@ -37,7 +47,9 @@ module Snapcher
         normalize_enum_changes(audited_attributes)
       end
 
-      def write_audit
+      def write_audit(attrs)
+        # debugger
+
         run_callbacks(:snapshot) {
           p "========== snapshot callback =========="
           snapshot = snapchers.create(attrs)
@@ -45,8 +57,46 @@ module Snapcher
         }
       end
 
+      def filter_encrypted_attrs(filtered_changes)
+        filter_attr_values(
+          audited_changes: filtered_changes,
+          attrs: respond_to?(:encrypted_attributes) ? Array(encrypted_attributes).map(&:to_s) : []
+        )
+      end
+
+      def filter_attr_values(audited_changes: {}, attrs: [], placeholder: "[FILTERED]")
+        attrs.each do |attr|
+          next unless audited_changes.key?(attr)
+
+          changes = audited_changes[attr]
+          values = changes.is_a?(Array) ? changes.map { placeholder } : placeholder
+
+          audited_changes[attr] = values
+        end
+
+        audited_changes
+      end
+
+      def normalize_enum_changes(changes)
+        return changes if Snapcher.store_synthesized_enums
+
+        self.class.defined_enums.each do |name, values|
+          if changes.has_key?(name)
+            changes[name] = \
+              if changes[name].is_a?(Array)
+                changes[name].map { |v| values[v] }
+              elsif rails_below?("5.0")
+                changes[name]
+              else
+                values[changes[name]]
+              end
+          end
+        end
+        changes
+      end
+
       def redact_values(filtered_changes)
-        debugger
+        # debugger
         filter_attr_values(
           audited_changes: filtered_changes,
           attrs: Array(audited_options[:redacted]).map(&:to_s),
