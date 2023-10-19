@@ -10,17 +10,8 @@ module Snapcher
   attr_writer :audit_class
 
   class << self
-    attr_accessor \
-    :auditing_enabled,
-    :current_user_method,
-    :ignored_attributes,
-    :max_audits,
-    :store_synthesized_enums,
-    :monitoring_column_name
+    attr_accessor :monitoring_column_name
   end
-
-  @ignored_attributes = %w[lock_version created_at updated_at created_on updated_on]
-  @store_synthesized_enums = false
 end
 
 require "snapcher/auditor"

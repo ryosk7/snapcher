@@ -23,14 +23,10 @@ module Snapcher
         before_destroy :snapshot_destroy
 
         define_callbacks :snapshot
-        # set_callback :snapshot, :after, :after_snapshot
-        # set_callback :snapshot, :around, :around_snapshot
       end
     end
 
     module SnapshotInstanceMethods
-      REDACTED = "[REDACTED]"
-
       def snapshot_create
         write_audit(action: "create", column_name: self.audited_options[:monitoring_column_name], after_params: audited_attributes[self.audited_options[:monitoring_column_name]], table_name: self.class.table_name)
       end
@@ -49,9 +45,7 @@ module Snapcher
 
       # List of attributes that are audited.
       def audited_attributes
-        audited_attributes = attributes.except(*self.class.non_audited_columns)
-        audited_attributes = redact_values(audited_attributes)
-        audited_attributes = filter_encrypted_attrs(audited_attributes)
+        audited_attributes = filter_encrypted_attrs(attributes)
         normalize_enum_changes(audited_attributes)
       end
 
@@ -62,15 +56,7 @@ module Snapcher
           changes
         end
 
-        filtered_changes = \
-          if audited_options[:only].present?
-            all_changes.slice(*self.class.audited_columns)
-          else
-            all_changes.except(*self.class.non_audited_columns)
-          end
-
-        filtered_changes = redact_values(filtered_changes)
-        filtered_changes = filter_encrypted_attrs(filtered_changes)
+        filtered_changes = filter_encrypted_attrs(all_changes)
         filtered_changes = normalize_enum_changes(filtered_changes)
         filtered_changes.to_hash
       end
@@ -115,29 +101,17 @@ module Snapcher
       end
 
       def normalize_enum_changes(changes)
-        return changes if Snapcher.store_synthesized_enums
-
         self.class.defined_enums.each do |name, values|
-          if changes.has_key?(name)
-            changes[name] = \
-              if changes[name].is_a?(Array)
-                changes[name].map { |v| values[v] }
-              elsif rails_below?("5.0")
-                changes[name]
-              else
-                values[changes[name]]
-              end
-          end
+          next unless changes.key?(name)
+
+          changes[name] = \
+            if changes[name].is_a?(Array)
+              changes[name].map { |v| values[v] }
+            else
+              values[changes[name]]
+            end
         end
         changes
-      end
-
-      def redact_values(filtered_changes)
-        filter_attr_values(
-          audited_changes: filtered_changes,
-          attrs: Array(audited_options[:redacted]).map(&:to_s),
-          placeholder: audited_options[:redaction_value] || REDACTED
-        )
       end
 
       CALLBACKS.each do |attr_name|
@@ -146,26 +120,8 @@ module Snapcher
     end
 
     module SnapcherClassMethods
-      def default_ignored_attributes
-        [primary_key, inheritance_column] | Snapcher.ignored_attributes
-      end
-
       def audited_columns
-        @audited_columns ||= column_names - non_audited_columns
-      end
-
-      # We have to calculate this here since column_names may not be available when `audited` is called
-      def non_audited_columns
-        @non_audited_columns ||= calculate_non_audited_columns
-      end
-
-      def non_audited_columns=(columns)
-        @audited_columns = nil # reset cached audited columns on assignment
-        @non_audited_columns = columns.map(&:to_s)
-      end
-
-      def calculate_non_audited_columns
-        default_ignored_attributes
+        @audited_columns ||= column_names
       end
     end
   end
