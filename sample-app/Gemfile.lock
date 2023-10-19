@@ -1,6 +1,5 @@
-GIT
-  remote: git@github.com:ryosk7/snapcher.git
-  revision: 500107c76d27788027b2ca27324e568e6b6e2157
+PATH
+  remote: ..
   specs:
     snapcher (0.1.0)
 
