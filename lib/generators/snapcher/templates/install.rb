@@ -3,8 +3,8 @@
 class <%= migration_class_name %> < <%= migration_parent %>
   def self.up
     create_table :snapshots, :force => true do |t|
-      t.column :snapchable_id, :integer
-      t.column :snapchable_type, :string
+      t.column :snapshotable_id, :integer
+      t.column :snapshotable_type, :string
       t.column :table_name, :string
       t.column :column_name, :string
       t.column :before_params, :string

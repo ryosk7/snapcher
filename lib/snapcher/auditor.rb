@@ -16,7 +16,7 @@ module Snapcher
 
         self.audited_options = options
 
-        has_many :snapchers, -> { order(version: :asc) }, as: :snapchable, class_name: "Snapcher::Snapshot", inverse_of: :snapchable
+        has_many :snapchers, -> { order(version: :asc) }, as: :snapshotable, class_name: "Snapcher::Snapshot", inverse_of: :snapshotable
 
         after_create :snapshot_create
         before_update :snapshot_update
