@@ -80,10 +80,10 @@ module Snapcher
 
         monitoring_column_name = self.audited_options[:monitoring_column_name]
 
-        return if filtered_changes[monitoring_column_name.to_sym].nil?
+        return if filtered_changes[monitoring_column_name.to_s].nil?
 
-        before_params = filtered_changes[monitoring_column_name.to_sym][0]
-        after_params = filtered_changes[monitoring_column_name.to_sym][1]
+        before_params = filtered_changes[monitoring_column_name.to_s][0]
+        after_params = filtered_changes[monitoring_column_name.to_s][1]
         {before_params: before_params, after_params: after_params}
       end
 
@@ -133,7 +133,6 @@ module Snapcher
       end
 
       def redact_values(filtered_changes)
-        # debugger
         filter_attr_values(
           audited_changes: filtered_changes,
           attrs: Array(audited_options[:redacted]).map(&:to_s),
