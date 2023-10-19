@@ -11,9 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2023_10_19_151334) do
-  create_table "snapshots", force: :cascade do |t|
-    t.integer "snapshotable_id"
-    t.string "snapshotable_type"
+  create_table "scannings", force: :cascade do |t|
+    t.integer "scannable_id"
+    t.string "scannable_type"
     t.string "table_name"
     t.string "column_name"
     t.string "before_params"

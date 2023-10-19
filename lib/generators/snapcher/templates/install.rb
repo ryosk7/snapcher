@@ -2,9 +2,9 @@
 
 class <%= migration_class_name %> < <%= migration_parent %>
   def self.up
-    create_table :snapshots, :force => true do |t|
-      t.column :snapshotable_id, :integer
-      t.column :snapshotable_type, :string
+    create_table :scannings, :force => true do |t|
+      t.column :scannable_id, :integer
+      t.column :scannable_type, :string
       t.column :table_name, :string
       t.column :column_name, :string
       t.column :before_params, :string
@@ -15,6 +15,6 @@ class <%= migration_class_name %> < <%= migration_parent %>
   end
 
   def self.down
-    drop_table :snapshots
+    drop_table :scannings
   end
 end
