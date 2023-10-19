@@ -31,7 +31,7 @@ module Snapcher
       REDACTED = "[REDACTED]"
 
       def snapshot_create
-        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_name], before_params: audited_attributes[self.audited_options[:monitoring_column_name]])
+        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_name], after_params: audited_attributes[self.audited_options[:monitoring_column_name]])
       end
 
       def snapshot_update
@@ -65,7 +65,7 @@ module Snapcher
         filtered_changes = normalize_enum_changes(filtered_changes)
         filtered_changes.to_hash
 
-        monitoring_column_name = self.audited_options[:monitoring_column_names]
+        monitoring_column_name = self.audited_options[:monitoring_column_name]
         before_params = filtered_changes[monitoring_column_name.to_sym][0]
         after_params = filtered_changes[monitoring_column_name.to_sym][1]
         {before_params: before_params, after_params: after_params}
