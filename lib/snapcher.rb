@@ -16,7 +16,7 @@ module Snapcher
     :ignored_attributes,
     :max_audits,
     :store_synthesized_enums,
-    :monitoring_column_names
+    :monitoring_column_name
   end
 
   @ignored_attributes = %w[lock_version created_at updated_at created_on updated_on]

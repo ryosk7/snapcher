@@ -31,11 +31,11 @@ module Snapcher
       REDACTED = "[REDACTED]"
 
       def snapshot_create
-        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_names], before_params: audited_attributes[self.audited_options[:monitoring_column_names]])
+        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_name], before_params: audited_attributes[self.audited_options[:monitoring_column_name]])
       end
 
       def snapshot_update
-        write_audit(action: "update", column_name: self.audited_options[:monitoring_column_names], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
+        write_audit(action: "update", column_name: self.audited_options[:monitoring_column_name], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
       end
 
       # List of attributes that are audited.
@@ -73,7 +73,6 @@ module Snapcher
 
       def write_audit(attrs)
         run_callbacks(:snapshot) {
-          p "========== snapshot callback =========="
           snapshot = snapchers.create(attrs)
           snapshot
         }
