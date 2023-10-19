@@ -32,18 +32,18 @@ module Snapcher
       REDACTED = "[REDACTED]"
 
       def snapshot_create
-        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_name], after_params: audited_attributes[self.audited_options[:monitoring_column_name]])
+        write_audit(action: "create", column_name: self.audited_options[:monitoring_column_name], after_params: audited_attributes[self.audited_options[:monitoring_column_name]], table_name: self.class.table_name)
       end
 
       def snapshot_update
         if (changes = audited_changes).present?
-          write_audit(action: "update", column_name: self.audited_options[:monitoring_column_name], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
+          write_audit(action: "update", column_name: self.audited_options[:monitoring_column_name], table_name: self.class.table_name, before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
         end
       end
 
       def snapshot_destroy
         unless new_record?
-          write_audit(action: "destroy", column_name: self.audited_options[:monitoring_column_name])
+          write_audit(action: "destroy", column_name: self.audited_options[:monitoring_column_name], table_name: self.class.table_name)
         end
       end
 
