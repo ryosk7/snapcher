@@ -5,7 +5,7 @@ module Snapcher
   module Auditor
     extend ActiveSupport::Concern
 
-    CALLBACKS = [:snapshot_create, :snapshot_update]
+    CALLBACKS = [:snapshot_create, :snapshot_update, :snapshot_destroy]
 
     module ClassMethods
       def snapshot(options = {})
@@ -20,6 +20,7 @@ module Snapcher
 
         after_create :snapshot_create
         before_update :snapshot_update
+        before_destroy :snapshot_destroy
 
         define_callbacks :snapshot
         # set_callback :snapshot, :after, :after_snapshot
@@ -37,6 +38,12 @@ module Snapcher
       def snapshot_update
         if (changes = audited_changes).present?
           write_audit(action: "update", column_name: self.audited_options[:monitoring_column_name], before_params: audited_changes[:before_params], after_params: audited_changes[:after_params])
+        end
+      end
+
+      def snapshot_destroy
+        unless new_record?
+          write_audit(action: "destroy", column_name: self.audited_options[:monitoring_column_name])
         end
       end
 
