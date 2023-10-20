@@ -1,0 +1,10 @@
+sqlite3mem: &SQLITE3MEM
+  adapter: sqlite3
+  database: ":memory:"
+
+sqlite3: &SQLITE
+  adapter: sqlite3
+  database: snapcher_test.sqlite3.db
+
+test:
+  <<: *<%= ENV['DB'] || 'SQLITE3MEM' %>

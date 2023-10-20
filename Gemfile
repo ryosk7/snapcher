@@ -3,7 +3,11 @@
 source "https://rubygems.org"
 
 # Specify your gem's dependencies in snapcher.gemspec
-gemspec
+gemspec name: "snapcher"
+
+gem "rails", ">= 7.0.0", "< 7.1"
+
+gem "sqlite3", ">= 1.4"
 
 gem "rake", "~> 13.0"
 
