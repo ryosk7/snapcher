@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "active_record"
-require_relative "snapcher/version"
 
 module Snapcher
   class Error < StandardError; end
@@ -27,4 +26,5 @@ ActiveSupport.on_load :active_record do
   include Snapcher::Junker
 end
 
+require "snapcher/sweeper"
 require "snapcher/railtie"

@@ -28,6 +28,8 @@ Gem::Specification.new do |spec|
     end
   end
 
+  spec.add_development_dependency "appraisal"
+
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
 
