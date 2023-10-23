@@ -5,6 +5,7 @@ inherit_gem:
 
 AllCops:
   TargetRubyVersion: 3.2
+  NewCops: disable
   Exclude:
     - lib/generators/snapcher/templates/install.rb
     - sample-app/bin/bundle
