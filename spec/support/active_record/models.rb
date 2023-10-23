@@ -6,6 +6,10 @@ module Models
       scanning column_name: "role"
 
       enum :role, { normal: 0, admin: 1 }
+
+      def name
+        write_attribute(:name)
+      end
     end
   end
 end

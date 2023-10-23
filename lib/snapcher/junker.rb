@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'debug'
 
 module Snapcher
   module Junker
@@ -15,7 +16,7 @@ module Snapcher
 
         self.snapcher_options = options
 
-        has_many :scannings, -> { order(version: :asc) }, as: :scannable, class_name: "Snapcher::Scanning", inverse_of: :scannable
+        has_many :scannings, -> { order(id: :asc) }, as: :scannable, class_name: "Snapcher::Scanning", inverse_of: :scannable
 
         after_create :scanning_create
         before_update :scanning_update

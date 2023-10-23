@@ -24,7 +24,7 @@ module RailsApp
       ActiveSupport::HashWithIndifferentAccess
     ]
 
-    config.active_support.cache_format_version = 7.1
+    config.active_support.cache_format_version = 7.0
   end
 end
 

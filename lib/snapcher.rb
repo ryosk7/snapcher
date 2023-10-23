@@ -27,4 +27,5 @@ ActiveSupport.on_load :active_record do
 end
 
 require "snapcher/sweeper"
-require "snapcher/railtie"
+require_relative 'snapcher/railtie' if defined?(Rails::Railtie)
+# require "snapcher/railtie"

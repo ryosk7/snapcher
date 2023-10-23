@@ -27,4 +27,15 @@ ActiveRecord::Schema.define do
     t.column :created_at, :datetime
     t.column :updated_at, :datetime
   end
+
+  create_table :scannings do |t|
+    t.column :scannable_id, :integer
+    t.column :scannable_type, :string
+    t.column :table_name, :string
+    t.column :column_name, :string
+    t.column :before_params, :string
+    t.column :after_params, :string
+    t.column :action, :string
+    t.column :created_at, :datetime
+  end
 end
