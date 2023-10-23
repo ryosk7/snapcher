@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require "bundler/gem_helper"
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
+
+Bundler::GemHelper.install_tasks(name: "snapcher")
 
 RSpec::Core::RakeTask.new(:spec)
 

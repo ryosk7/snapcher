@@ -6,6 +6,8 @@ module Snapcher
 
     cattr_accessor :snapcher_class_names
 
-    scope :scannable_finder, ->(scannable_id, scannable_type) { where(scannable_id: scannable_id, scannable_type: scannable_type) }
+    scope :scannable_finder, lambda { |scannable_id, scannable_type|
+                               where(scannable_id:, scannable_type:)
+                             }
   end
 end

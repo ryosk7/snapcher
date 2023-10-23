@@ -20,7 +20,9 @@ module Snapcher
     end
 
     def current_user
-      lambda { controller.send(Snapcher.current_user_method) if controller.respond_to?(Snapcher.current_user_method, true) }
+      lambda {
+        controller.send(Snapcher.current_user_method) if controller.respond_to?(Snapcher.current_user_method, true)
+      }
     end
 
     def remote_ip

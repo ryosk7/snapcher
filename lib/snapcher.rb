@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "active_record"
-require_relative "snapcher/version"
 
 module Snapcher
   class Error < StandardError; end
@@ -12,7 +11,8 @@ module Snapcher
     attr_writer :scanning_class
 
     def scanning_class
-      # The scanning_class is set as String in the initializer. It can not be constantized during initialization and must
+      # The scanning_class is set as String in the initializer.
+      # It can not be constantized during initialization and must
       # be constantized at runtime.
       @scanning_class = @scanning_class.safe_constantize if @scanning_class.is_a?(String)
       @scanning_class ||= Snapcher::Scanning
@@ -27,4 +27,6 @@ ActiveSupport.on_load :active_record do
   include Snapcher::Junker
 end
 
-require "snapcher/railtie"
+require "snapcher/sweeper"
+require_relative "snapcher/railtie" if defined?(Rails::Railtie)
+# require "snapcher/railtie"

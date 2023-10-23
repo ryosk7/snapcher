@@ -2,7 +2,7 @@
 
 class InstallSnapcher < ActiveRecord::Migration[7.1]
   def self.up
-    create_table :scannings, :force => true do |t|
+    create_table :scannings, force: true do |t|
       t.column :scannable_id, :integer
       t.column :scannable_type, :string
       t.column :table_name, :string

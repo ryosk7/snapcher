@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+ENV["RAILS_ENV"] = "test"
+require "bundler/setup"
 require "snapcher"
+# require "sample_app/config/environment"
+require "rails_app/config/environment"
+require "rspec/rails"
+require "support/active_record/models"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
