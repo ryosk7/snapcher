@@ -11,7 +11,8 @@ module Snapcher
     attr_writer :scanning_class
 
     def scanning_class
-      # The scanning_class is set as String in the initializer. It can not be constantized during initialization and must
+      # The scanning_class is set as String in the initializer.
+      # It can not be constantized during initialization and must
       # be constantized at runtime.
       @scanning_class = @scanning_class.safe_constantize if @scanning_class.is_a?(String)
       @scanning_class ||= Snapcher::Scanning

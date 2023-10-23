@@ -31,15 +31,20 @@ module Snapcher
 
     module ScanningInstanceMethods
       def scanning_create
-        run_scanning(action: "create", column_name: snapcher_options[:column_name],
-                     after_params: snapcher_attributes[snapcher_options[:column_name]], table_name: self.class.table_name)
+        run_scanning(action: "create",
+                     column_name: snapcher_options[:column_name],
+                     after_params: snapcher_attributes[snapcher_options[:column_name]],
+                     table_name: self.class.table_name)
       end
 
       def scanning_update
         return unless (changes = snapcher_changes).present?
 
-        run_scanning(action: "update", column_name: snapcher_options[:column_name],
-                     table_name: self.class.table_name, before_params: snapcher_changes[:before_params], after_params: snapcher_changes[:after_params])
+        run_scanning(action: "update",
+                     column_name: snapcher_options[:column_name],
+                     table_name: self.class.table_name,
+                     before_params: snapcher_changes[:before_params],
+                     after_params: snapcher_changes[:after_params])
       end
 
       def scanning_destroy
@@ -76,7 +81,7 @@ module Snapcher
 
         before_params = filtered_changes[monitoring_column_name.to_s][0]
         after_params = filtered_changes[monitoring_column_name.to_s][1]
-        { before_params: before_params, after_params: after_params }
+        { before_params:, after_params: }
       end
 
       def run_scanning(attrs)
