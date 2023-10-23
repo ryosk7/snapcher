@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'debug'
 
 module Snapcher
@@ -16,7 +17,9 @@ module Snapcher
 
         self.snapcher_options = options
 
-        has_many :scannings, -> { order(id: :asc) }, as: :scannable, class_name: "Snapcher::Scanning", inverse_of: :scannable
+        has_many :scannings, -> {
+                               order(id: :asc)
+                             }, as: :scannable, class_name: "Snapcher::Scanning", inverse_of: :scannable
 
         after_create :scanning_create
         before_update :scanning_update
@@ -28,18 +31,21 @@ module Snapcher
 
     module ScanningInstanceMethods
       def scanning_create
-        run_scanning(action: "create", column_name: self.snapcher_options[:column_name], after_params: snapcher_attributes[self.snapcher_options[:column_name]], table_name: self.class.table_name)
+        run_scanning(action: "create", column_name: self.snapcher_options[:column_name],
+                     after_params: snapcher_attributes[self.snapcher_options[:column_name]], table_name: self.class.table_name)
       end
 
       def scanning_update
         if (changes = snapcher_changes).present?
-          run_scanning(action: "update", column_name: self.snapcher_options[:column_name], table_name: self.class.table_name, before_params: snapcher_changes[:before_params], after_params: snapcher_changes[:after_params])
+          run_scanning(action: "update", column_name: self.snapcher_options[:column_name],
+                       table_name: self.class.table_name, before_params: snapcher_changes[:before_params], after_params: snapcher_changes[:after_params])
         end
       end
 
       def scanning_destroy
         unless new_record?
-          run_scanning(action: "destroy", column_name: self.snapcher_options[:column_name], table_name: self.class.table_name)
+          run_scanning(action: "destroy", column_name: self.snapcher_options[:column_name],
+                       table_name: self.class.table_name)
         end
       end
 
@@ -51,10 +57,10 @@ module Snapcher
 
       def scanning_change_values
         all_changes = if respond_to?(:changes_to_save)
-          changes_to_save
-        else
-          changes
-        end
+                        changes_to_save
+                      else
+                        changes
+                      end
 
         filtered_changes = filter_encrypted_attrs(all_changes)
         filtered_changes = normalize_enum_changes(filtered_changes)
@@ -70,7 +76,7 @@ module Snapcher
 
         before_params = filtered_changes[monitoring_column_name.to_s][0]
         after_params = filtered_changes[monitoring_column_name.to_s][1]
-        {before_params: before_params, after_params: after_params}
+        { before_params: before_params, after_params: after_params }
       end
 
       def run_scanning(attrs)

@@ -6,6 +6,7 @@ begin
   db_name = db_config.delete("database")
   raise StandardError.new("No database name specified.") if db_name.blank?
   raise StandardError.new("Not yet supported.") if db_type != "sqlite3"
+
   db_file = Pathname.new(__FILE__).dirname.join(db_name)
   db_file.unlink if db_file.file?
 rescue => e
