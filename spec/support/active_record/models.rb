@@ -1,4 +1,4 @@
-require File.expand_path("../schema", __FILE__)
+require File.expand_path("schema", __dir__)
 
 module Models
   module ActiveRecord

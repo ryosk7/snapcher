@@ -4,12 +4,8 @@ module Snapcher
   class Railtie < Rails::Railtie
     initializer "snapcher.sweeper" do
       ActiveSupport.on_load(:action_controller) do
-        if defined?(ActionController::Base)
-          ActionController::Base.around_action Snapcher::Sweeper.new
-        end
-        if defined?(ActionController::API)
-          ActionController::API.around_action Snapcher::Sweeper.new
-        end
+        ActionController::Base.around_action Snapcher::Sweeper.new if defined?(ActionController::Base)
+        ActionController::API.around_action Snapcher::Sweeper.new if defined?(ActionController::API)
       end
     end
   end

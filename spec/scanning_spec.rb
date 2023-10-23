@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'debug'
+require "debug"
 require "spec_helper"
 
 RSpec.describe "Scanning" do
@@ -35,9 +35,9 @@ RSpec.describe "Scanning" do
   end
 
   context "when the column whose data has been changed is role" do
-    let!(:user) {
+    let!(:user) do
       Models::ActiveRecord::User.create name: "Gillian Seed", role: Models::ActiveRecord::User.roles[:normal]
-    }
+    end
 
     it "scanning data is not created during update action" do
       user # call then created.

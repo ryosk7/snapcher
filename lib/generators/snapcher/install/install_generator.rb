@@ -7,7 +7,7 @@ module Snapcher
   class InstallGenerator < ::Rails::Generators::Base
     include Rails::Generators::Migration
 
-    source_root File.expand_path("../../templates", __FILE__)
+    source_root File.expand_path("../templates", __dir__)
 
     def copy_migration
       migration_template "install.rb", "db/migrate/install_snapcher.rb"
@@ -24,9 +24,11 @@ module Snapcher
     end
 
     def self.timestamped_migrations?
-      (Rails.version >= "7.0") ?
-        ::ActiveRecord.timestamped_migrations :
+      if Rails.version >= "7.0"
+        ::ActiveRecord.timestamped_migrations
+      else
         ::ActiveRecord::Base.timestamped_migrations
+      end
     end
 
     def migration_parent

@@ -4,12 +4,12 @@ begin
   db_config = ActiveRecord::Base.configurations[Rails.env].clone
   db_type = db_config["adapter"]
   db_name = db_config.delete("database")
-  raise StandardError.new("No database name specified.") if db_name.blank?
-  raise StandardError.new("Not yet supported.") if db_type != "sqlite3"
+  raise StandardError, "No database name specified." if db_name.blank?
+  raise StandardError, "Not yet supported." if db_type != "sqlite3"
 
   db_file = Pathname.new(__FILE__).dirname.join(db_name)
   db_file.unlink if db_file.file?
-rescue => e
+rescue StandardError => e
   Kernel.warn e
 end
 
