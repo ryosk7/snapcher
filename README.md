@@ -7,7 +7,11 @@
 ![GitHub](https://img.shields.io/github/license/ryosk7/snapcher)
 =======
 
-**Snapcher** is an ORM extension that logs all changes to your models.
+**Snapcher** is an ORM extension that logs changes to specific columns to your model.
+
+When a change is made to a specific column, the difference between before and after the change is obtained and saved.
+
+To make it easier for analysts, save the table name, column name, and data before and after changes as separate columns.
 
 ## Supported
 
@@ -43,6 +47,7 @@ $ rails db:migrate
 ## Usage
 
 Simply call `scanning` on your models.
+
 Use `column_name:` to select the column you want to log.
 
 ```ruby
