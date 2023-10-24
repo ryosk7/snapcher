@@ -8,8 +8,12 @@ Gem::Specification.new do |spec|
   spec.authors = ["ryosk7"]
   spec.email = ["uchiryo7@gmail.com"]
 
-  spec.summary = "Save snapshot of DB columns."
-  spec.description = spec.summary
+  spec.summary = "Snapcher is an ORM extension that logs changes to specific columns to your model."
+  spec.description = <<~EOF
+    Snapcher is an ORM extension that logs changes to specific columns to your model.
+    When a change is made to a specific column, the difference between before and after the change is obtained and saved.
+    To make it easier for analysts, save the table name, column name, and data before and after changes as separate columns.
+  EOF
   spec.homepage = "https://github.com/ryosk7/snapcher"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
@@ -27,8 +31,6 @@ Gem::Specification.new do |spec|
       (File.expand_path(f) == __FILE__) || f.start_with?(*%w[bin/ test/ spec/ features/ .git .circleci appveyor])
     end
   end
-
-  spec.add_development_dependency "appraisal"
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"

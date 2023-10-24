@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    snapcher (0.1.1)
+    snapcher (0.1.2)
 
 GEM
   remote: https://rubygems.org/
@@ -71,10 +71,6 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    appraisal (2.5.0)
-      bundler
-      rake
-      thor (>= 0.14.0)
     ast (2.4.2)
     base64 (0.1.1)
     builder (3.2.4)
@@ -108,7 +104,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     minitest (5.20.0)
-    net-imap (0.4.1)
+    net-imap (0.4.2)
       date
       net-protocol
     net-pop (0.1.2)
@@ -233,7 +229,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  appraisal
   debug (>= 1.8.0)
   rails (>= 7.0.0, < 7.1)
   railties
