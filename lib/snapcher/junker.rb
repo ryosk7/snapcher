@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "debug"
-
 module Snapcher
   module Junker
     extend ActiveSupport::Concern
