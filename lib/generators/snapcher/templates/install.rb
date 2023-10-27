@@ -11,6 +11,7 @@ class <%= migration_class_name %> < <%= migration_parent %>
       t.column :after_params, :string
       t.column :action, :string
       t.column :created_at, :datetime
+      t.timestamps null: false
     end
   end
 
