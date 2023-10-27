@@ -9,6 +9,7 @@ class <%= migration_class_name %> < <%= migration_parent %>
       t.column :column_name, :string
       t.column :before_params, :string
       t.column :after_params, :string
+      t.column :version, :integer, :default => 0
       t.column :action, :string
       t.column :created_at, :datetime
     end

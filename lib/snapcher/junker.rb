@@ -16,7 +16,7 @@ module Snapcher
         self.snapcher_options = options
 
         has_many :scannings, lambda {
-                               order(id: :asc)
+                               order(version: :asc)
                              }, as: :scannable, class_name: "Snapcher::Scanning", inverse_of: :scannable
 
         after_create :scanning_create
