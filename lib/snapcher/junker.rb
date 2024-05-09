@@ -32,6 +32,7 @@ module Snapcher
         run_scanning(action: "create",
                      column_name: snapcher_options[:column_name],
                      after_params: snapcher_attributes[snapcher_options[:column_name]],
+                     user_id: snapcher_attributes["user_id"],
                      table_name: self.class.table_name)
       end
 
@@ -41,6 +42,7 @@ module Snapcher
         run_scanning(action: "update",
                      column_name: snapcher_options[:column_name],
                      table_name: self.class.table_name,
+                     user_id: snapcher_attributes["user_id"],
                      before_params: snapcher_changes[:before_params],
                      after_params: snapcher_changes[:after_params])
       end
@@ -48,8 +50,10 @@ module Snapcher
       def scanning_destroy
         return if new_record?
 
-        run_scanning(action: "destroy", column_name: snapcher_options[:column_name],
-                     table_name: self.class.table_name)
+        run_scanning(action: "destroy",
+                     column_name: snapcher_options[:column_name],
+                     table_name: self.class.table_name,
+                     user_id: snapcher_attributes["user_id"])
       end
 
       # List of attributes that are snapcher.
