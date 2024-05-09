@@ -6,8 +6,12 @@ module Snapcher
   class Error < StandardError; end
   # Your code goes here...
 
+  class RequestStore < ActiveSupport::CurrentAttributes
+    attribute :snapcher_store
+  end
+
   class << self
-    attr_accessor :column_name
+    attr_accessor :column_name, :current_user
     attr_writer :scanning_class
 
     def scanning_class
@@ -17,7 +21,13 @@ module Snapcher
       @scanning_class = @scanning_class.safe_constantize if @scanning_class.is_a?(String)
       @scanning_class ||= Snapcher::Scanning
     end
+
+    def store
+      RequestStore.snapcher_store ||= {}
+    end
   end
+
+  @current_user_method = :current_user
 end
 
 require "snapcher/junker"
