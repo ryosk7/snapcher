@@ -1,4 +1,4 @@
-![snapcher_logo](https://github.com/ryosk7/snapcher/blob/0-1-2/logo/snapcher_logo.png?raw=true)
+![snapcher_logo](https://github.com/ryosk7/snapcher/assets/26167770/8f8f71d3-d6aa-4755-a15c-6f714b1e948c)
 
 ----------
 
