@@ -32,7 +32,7 @@ module Snapcher
         run_scanning(action: "create",
                      column_name: snapcher_options[:column_name],
                      after_params: snapcher_attributes[snapcher_options[:column_name]],
-                     user_id: snapcher_attributes["user_id"],
+                     user_id: snatch,
                      table_name: self.class.table_name)
       end
 
@@ -42,7 +42,7 @@ module Snapcher
         run_scanning(action: "update",
                      column_name: snapcher_options[:column_name],
                      table_name: self.class.table_name,
-                     user_id: snapcher_attributes["user_id"],
+                     user_id: snatch,
                      before_params: snapcher_changes[:before_params],
                      after_params: snapcher_changes[:after_params])
       end
@@ -53,13 +53,17 @@ module Snapcher
         run_scanning(action: "destroy",
                      column_name: snapcher_options[:column_name],
                      table_name: self.class.table_name,
-                     user_id: snapcher_attributes["user_id"])
+                     user_id: snatch)
       end
 
       # List of attributes that are snapcher.
       def snapcher_attributes
         snapcher_attributes = filter_encrypted_attrs(attributes)
         normalize_enum_changes(snapcher_attributes)
+      end
+
+      def snatch
+        snapcher_attributes["user_id"] || snapcher_attributes[snapcher_options[:change_user_column]]
       end
 
       def scanning_change_values
@@ -75,9 +79,10 @@ module Snapcher
       end
 
       def snapcher_changes
+        snapcher_attributes = filter_encrypted_attrs(attributes)
         filtered_changes = scanning_change_values
-
         monitoring_column_name = snapcher_options[:column_name]
+        change_user_column = snapcher_options[:change_user_column]
 
         return if filtered_changes[monitoring_column_name.to_s].nil?
 
