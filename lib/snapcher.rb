@@ -12,7 +12,7 @@ module Snapcher
 
   class << self
     attr_accessor :column_name, :current_user
-    attr_accessor :change_user_column
+    attr_accessor :snatch_user
     attr_writer :scanning_class
 
     def scanning_class

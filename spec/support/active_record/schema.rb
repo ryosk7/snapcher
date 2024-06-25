@@ -40,4 +40,12 @@ ActiveRecord::Schema.define do
     t.column :user_id, :integer
     t.column :created_at, :datetime
   end
+
+  create_table :orders do |t|
+    t.column :scan_user_id, :string
+    t.column :navigate_user_id, :string
+    t.column :created_at, :datetime
+    t.column :updated_at, :datetime
+  end
+
 end
