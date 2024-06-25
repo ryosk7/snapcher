@@ -37,6 +37,7 @@ ActiveRecord::Schema.define do
     t.column :before_params, :string
     t.column :after_params, :string
     t.column :action, :string
+    t.column :user_id, :integer
     t.column :created_at, :datetime
   end
 end
