@@ -5,11 +5,15 @@ module Models
     class User < ::ActiveRecord::Base
       scanning column_name: "role"
 
-      enum :role, { normal: 0, admin: 1 }
+      enum :role, { snatcher: 0, navigator: 1, juncker: 2, hunter: 3 }
 
       def name
         write_attribute(:name)
       end
+    end
+
+    class Order < ::ActiveRecord::Base
+      scanning column_name: "scan_user_id", snatch_user: "navigate_user_id"
     end
   end
 end

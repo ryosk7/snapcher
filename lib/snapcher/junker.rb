@@ -63,7 +63,7 @@ module Snapcher
       end
 
       def snatch
-        snapcher_attributes[snapcher_options[:change_user_column]] || snapcher_attributes["user_id"]
+        snapcher_attributes[snapcher_options[:snatch_user]] || snapcher_attributes["user_id"]
       end
 
       def scanning_change_values
@@ -82,8 +82,6 @@ module Snapcher
         snapcher_attributes = filter_encrypted_attrs(attributes)
         filtered_changes = scanning_change_values
         monitoring_column_name = snapcher_options[:column_name]
-        change_user_column = snapcher_options[:change_user_column]
-
         return if filtered_changes[monitoring_column_name.to_s].nil?
 
         before_params = filtered_changes[monitoring_column_name.to_s][0]

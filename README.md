@@ -84,7 +84,7 @@ If the "Snatcher" column you want to capture is not user_id, you can specify thi
 
 ```ruby
 class User < ActiveRecord::Base
-  scanning column_name: "name", change_user_column: "id"
+  scanning column_name: "name", snatch_user: "id"
 end
 ```
 
