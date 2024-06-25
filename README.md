@@ -13,6 +13,10 @@ When a change is made to a specific column, the difference between before and af
 
 To make it easier for analysts, save the table name, column name, and data before and after changes as separate columns.
 
+The name of this gem comes from one of Hideo Kojima's game works, ["Snatcher"](https://en.wikipedia.org/wiki/Snatcher_(video_game)).
+
+It was the first of his game works to introduce cinematic direction, and "Snapcher" is also the first of my gem works.
+
 ## Supported
 
 ### Snapcher supports Ruby versions:
@@ -76,3 +80,11 @@ snapcher.action # => "update"
 snapcher.before_params # => "Gillian Seed"
 snapcher.after_params # => "Mika Slayton"
 ```
+If the "Snatcher" column you want to capture is not user_id, you can specify this.
+
+```ruby
+class User < ActiveRecord::Base
+  scanning column_name: "name", change_user_column: "id"
+end
+```
+
