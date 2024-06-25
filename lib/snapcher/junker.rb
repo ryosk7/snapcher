@@ -63,7 +63,7 @@ module Snapcher
       end
 
       def snatch
-        snapcher_attributes["user_id"] || snapcher_attributes[snapcher_options[:change_user_column]]
+        snapcher_attributes[snapcher_options[:change_user_column]] || snapcher_attributes["user_id"]
       end
 
       def scanning_change_values
