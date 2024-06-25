@@ -14,6 +14,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_25_084542) do
   create_table "gifts", force: :cascade do |t|
     t.integer "from_user_id"
     t.integer "to_user_id"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
